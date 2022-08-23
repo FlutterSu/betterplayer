@@ -2,7 +2,6 @@ package com.jhomlala.better_player
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Rect
 import android.util.Log
 import android.util.LongSparseArray
 import android.view.SurfaceView
@@ -28,13 +27,8 @@ internal class BetterViewFactory(private val videoPlayers: LongSparseArray<Bette
             (surfaceView.parent as ViewGroup).removeView(surfaceView)
         }
 
-        val frameLayout: FrameLayout =
-            ViewUtils.getActivity(context)!!
-                .findViewById<FrameLayout>(FlutterActivity.FLUTTER_VIEW_ID)
-
-        frameLayout.addView(surfaceView, 0)
-
         val viewController = ViewController(context, surfaceView);
+        viewController.initial()
 
         return BetterPlatformView(viewController)
     }
@@ -47,6 +41,7 @@ internal class BetterPlatformView(private val view: ViewController) :
     }
 
     override fun dispose() {
+        view.dispose()
     }
 }
 
@@ -74,5 +69,22 @@ internal class ViewController(context: Context?, private val view: SurfaceView) 
         view.y = par.y
 
         super.onDraw(canvas)
+    }
+
+    fun initial() {
+        val frameLayout = getFlutterFrameLayout()
+
+        frameLayout.addView(view, 0)
+    }
+
+    fun dispose() {
+        val frameLayout = getFlutterFrameLayout()
+
+        frameLayout.removeView(view)
+    }
+
+    private fun getFlutterFrameLayout(): FrameLayout {
+        return ViewUtils.getActivity(context)!!
+            .findViewById<FrameLayout>(FlutterActivity.FLUTTER_VIEW_ID)
     }
 }
