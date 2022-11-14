@@ -448,6 +448,13 @@ internal class BetterPlayer(
             })
         exoPlayer?.setVideoSurfaceView(textureEntry)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val builder = trackSelector.parameters.buildUpon()
+                .setTunnelingEnabled(true)
+
+            trackSelector.setParameters(builder)
+        }
+
         setAudioAttributes(exoPlayer, true)
         exoPlayer?.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
