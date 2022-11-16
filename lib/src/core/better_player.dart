@@ -36,6 +36,18 @@ class BetterPlayer extends StatefulWidget {
         ),
       );
 
+  factory BetterPlayer.assets(
+    String url, {
+    BetterPlayerConfiguration? betterPlayerConfiguration,
+  }) =>
+      BetterPlayer(
+        controller: BetterPlayerController(
+          betterPlayerConfiguration ?? const BetterPlayerConfiguration(),
+          betterPlayerDataSource:
+              BetterPlayerDataSource(BetterPlayerDataSourceType.assets, url),
+        ),
+      );
+
   final BetterPlayerController controller;
 
   @override

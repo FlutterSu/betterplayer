@@ -497,6 +497,21 @@ class BetterPlayerController {
                 ?.notificationConfiguration?.activityName,
             clearKey: _betterPlayerDataSource?.drmConfiguration?.clearKey);
         break;
+      case BetterPlayerDataSourceType.assets:
+        await videoPlayerController?.setAssetDataSource(
+            betterPlayerDataSource.url,
+            showNotification: _betterPlayerDataSource
+                ?.notificationConfiguration?.showNotification,
+            title: _betterPlayerDataSource?.notificationConfiguration?.title,
+            author: _betterPlayerDataSource?.notificationConfiguration?.author,
+            imageUrl:
+                _betterPlayerDataSource?.notificationConfiguration?.imageUrl,
+            notificationChannelName: _betterPlayerDataSource
+                ?.notificationConfiguration?.notificationChannelName,
+            overriddenDuration: _betterPlayerDataSource!.overriddenDuration,
+            activityName: _betterPlayerDataSource
+                ?.notificationConfiguration?.activityName);
+        break;
       case BetterPlayerDataSourceType.memory:
         final file = await _createFile(_betterPlayerDataSource!.bytes!,
             extension: _betterPlayerDataSource!.videoExtension);
