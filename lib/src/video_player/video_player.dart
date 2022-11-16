@@ -283,6 +283,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   Future<void> setAssetDataSource(
     String dataSource, {
     String? package,
+    bool useCache = false,
+    int? maxCacheSize,
+    int? maxCacheFileSize,
+    String? cacheKey,
     bool? showNotification,
     String? title,
     String? author,
@@ -296,6 +300,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
         sourceType: DataSourceType.asset,
         asset: dataSource,
         package: package,
+        useCache: useCache,
+        maxCacheSize: maxCacheSize,
+        maxCacheFileSize: maxCacheFileSize,
+        cacheKey: cacheKey,
         showNotification: showNotification,
         title: title,
         author: author,

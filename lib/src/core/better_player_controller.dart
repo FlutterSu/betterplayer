@@ -500,6 +500,14 @@ class BetterPlayerController {
       case BetterPlayerDataSourceType.assets:
         await videoPlayerController?.setAssetDataSource(
             betterPlayerDataSource.url,
+            useCache:
+            _betterPlayerDataSource!.cacheConfiguration?.useCache ?? false,
+            maxCacheSize:
+            _betterPlayerDataSource!.cacheConfiguration?.maxCacheSize ?? 0,
+            maxCacheFileSize:
+            _betterPlayerDataSource!.cacheConfiguration?.maxCacheFileSize ??
+                0,
+            cacheKey: _betterPlayerDataSource?.cacheConfiguration?.key,
             showNotification: _betterPlayerDataSource
                 ?.notificationConfiguration?.showNotification,
             title: _betterPlayerDataSource?.notificationConfiguration?.title,
