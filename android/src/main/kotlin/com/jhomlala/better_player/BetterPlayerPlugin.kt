@@ -24,6 +24,7 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.view.TextureRegistry
+import io.flutter.FlutterInjector
 import java.lang.Exception
 import java.util.HashMap
 
@@ -40,7 +41,7 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     private var pipHandler: Handler? = null
     private var pipRunnable: Runnable? = null
     override fun onAttachedToEngine(binding: FlutterPluginBinding) {
-        val loader = FlutterLoader()
+        val loader = FlutterInjector.instance().flutterLoader()
         flutterState = FlutterState(
             binding.applicationContext,
             binding.binaryMessenger, object : KeyForAssetFn {

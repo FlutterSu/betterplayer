@@ -101,7 +101,8 @@ class BetterPlayerDataSource {
     this.bufferingConfiguration = const BetterPlayerBufferingConfiguration(),
   }) : assert(
             (type == BetterPlayerDataSourceType.network ||
-                    type == BetterPlayerDataSourceType.file) ||
+                    type == BetterPlayerDataSourceType.file||
+                    type == BetterPlayerDataSourceType.assets) ||
                 (type == BetterPlayerDataSourceType.memory &&
                     bytes?.isNotEmpty == true),
             "Url can't be null in network or file data source | bytes can't be null when using memory data source");
@@ -172,6 +173,35 @@ class BetterPlayerDataSource {
           const BetterPlayerNotificationConfiguration(showNotification: false),
       overriddenDuration: overriddenDuration,
       placeholder: placeholder,
+    );
+  }
+
+  factory BetterPlayerDataSource.assets(
+      String url, {
+        List<BetterPlayerSubtitlesSource>? subtitles,
+        bool? useAsmsSubtitles,
+        bool? useAsmsTracks,
+        Map<String, String>? qualities,
+        BetterPlayerCacheConfiguration? cacheConfiguration,
+        BetterPlayerNotificationConfiguration? notificationConfiguration,
+        Duration? overriddenDuration,
+        Widget? placeholder,
+        BetterPlayerBufferingConfiguration bufferingConfiguration =
+        const BetterPlayerBufferingConfiguration(),
+      }) {
+    return BetterPlayerDataSource(
+      BetterPlayerDataSourceType.assets,
+      url,
+      subtitles: subtitles,
+      useAsmsSubtitles: useAsmsSubtitles,
+      useAsmsTracks: useAsmsTracks,
+      resolutions: qualities,
+      cacheConfiguration: cacheConfiguration,
+      notificationConfiguration: notificationConfiguration =
+      const BetterPlayerNotificationConfiguration(showNotification: false),
+      overriddenDuration: overriddenDuration,
+      placeholder: placeholder,
+      bufferingConfiguration: bufferingConfiguration,
     );
   }
 
