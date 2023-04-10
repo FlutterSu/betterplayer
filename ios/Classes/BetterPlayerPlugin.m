@@ -278,7 +278,7 @@ bool _remoteCommandsInitialized = false;
 
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-
+    @try{
 
     if ([@"init" isEqualToString:call.method]) {
         // Allow audio playback when the Ring/Silent switch is set to silent
@@ -417,9 +417,15 @@ bool _remoteCommandsInitialized = false;
             [player disablePictureInPicture];
             [player setPictureInPicture:false];
         } else if ([@"setAudioTrack" isEqualToString:call.method]){
-            NSString* name = argsMap[@"name"];
-            int index = [argsMap[@"index"] intValue];
-            [player setAudioTrack:name index: index];
+            @try{
+                NSString* name = argsMap[@"name"];
+                int index = [argsMap[@"index"] intValue];
+                [player setAudioTrack:name index: index];
+                result(nil);
+            }
+            @catch(NSException *exception) {
+                result([FlutterError errorWithCode:@"ERROR setAudioTrack " message:[NSString stringWithFormat:@"%@ ",exception.name] details:[NSString stringWithFormat:@"Reason: %@ ",exception.reason]]);
+            }
         } else if ([@"setMixWithOthers" isEqualToString:call.method]){
             [player setMixWithOthers:[argsMap[@"mixWithOthers"] boolValue]];
         } else if ([@"preCache" isEqualToString:call.method]){
@@ -469,6 +475,10 @@ bool _remoteCommandsInitialized = false;
         } else {
             result(FlutterMethodNotImplemented);
         }
+    }
+    }
+    @catch(NSException *exception) {
+        result([FlutterError errorWithCode:[NSString stringWithFormat:@"ERROR MethodCall %@ ", call.method] message:[NSString stringWithFormat:@"%@ ",exception.name] details:[NSString stringWithFormat:@"Reason: %@ ",exception.reason]]);
     }
 }
 @end
