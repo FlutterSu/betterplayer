@@ -739,11 +739,13 @@ internal class BetterPlayer(
         if (mappedTrackInfo != null) {
             val builder = trackSelector.parameters.buildUpon()
                 .setRendererDisabled(rendererIndex, false)
+                .clearOverrides()
                 .addOverride(
                     TrackSelectionOverride(
                         mappedTrackInfo.getTrackGroups(
                             rendererIndex
-                        ).get(groupIndex), rendererIndex
+                        ).get(groupIndex), groupElementIndex
+
                     )
                 )
 
