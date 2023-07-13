@@ -50,7 +50,7 @@ class BetterPlayerSubtitlesFactory {
         source.headers?.keys.forEach((key) {
           final value = source.headers![key];
           if (value != null) {
-            request.headers.add(key, value);
+            request.headers.set(key, value);
           }
         });
         final response = await request.close();
