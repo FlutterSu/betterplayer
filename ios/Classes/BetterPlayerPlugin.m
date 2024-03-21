@@ -426,6 +426,16 @@ bool _remoteCommandsInitialized = false;
             @catch(NSException *exception) {
                 result([FlutterError errorWithCode:@"ERROR setAudioTrack " message:[NSString stringWithFormat:@"%@ ",exception.name] details:[NSString stringWithFormat:@"Reason: %@ ",exception.reason]]);
             }
+        } else if ([@"setSubtitleTrack" isEqualToString:call.method]){
+            @try{
+                NSString* name = argsMap[@"name"];
+                int index = [argsMap[@"index"] intValue];
+                [player setSubtitleTrack:name index: index];
+                result(nil);
+            }
+            @catch(NSException *exception) {
+                result([FlutterError errorWithCode:@"ERROR setSubtitleTrack " message:[NSString stringWithFormat:@"%@ ",exception.name] details:[NSString stringWithFormat:@"Reason: %@ ",exception.reason]]);
+            }
         } else if ([@"setMixWithOthers" isEqualToString:call.method]){
             [player setMixWithOthers:[argsMap[@"mixWithOthers"] boolValue]];
         } else if ([@"preCache" isEqualToString:call.method]){
