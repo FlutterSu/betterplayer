@@ -710,6 +710,32 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 
 }
 
+- (void) setSubtitleTrack:(NSString*) name index:(int) index{
+    AVMediaSelectionGroup *subtitleGroup = [[[_player currentItem] asset] mediaSelectionGroupForMediaCharacteristic: AVMediaCharacteristicLegible];
+    NSArray* options = subtitleGroup.options;
+    
+    NSLog(@"SetSubtitleTrack name: %@, index: %d", name, index);
+
+    for (int subtitleTrackIndex = 0; subtitleTrackIndex < [options count]; subtitleTrackIndex++) {
+        AVMediaSelectionOption* option = [options objectAtIndex:subtitleTrackIndex];
+        NSArray *metaDatas = [AVMetadataItem metadataItemsFromArray:option.commonMetadata withKey:@"title" keySpace:@"comn"];
+        if (metaDatas.count > 0) {
+            NSString *title = ((AVMetadataItem*)[metaDatas objectAtIndex:0]).stringValue;
+            if ([name compare:title] == NSOrderedSame && subtitleTrackIndex == index ){
+                [[_player currentItem] selectMediaOption:option inMediaSelectionGroup: subtitleGroup];
+                
+                AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
+                playerLayer.frame = self.view.bounds;
+                [self.view.layer addSublayer:playerLayer];
+                return;
+            }
+        }
+    }
+    
+              
+    [[_player currentItem] selectMediaOption:NULL inMediaSelectionGroup:subtitleGroup];
+}
+
 - (void)setMixWithOthers:(bool)mixWithOthers {
   if (mixWithOthers) {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback

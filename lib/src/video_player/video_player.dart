@@ -629,6 +629,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     _videoPlayerPlatform.setAudioTrack(_textureId, name, index);
   }
 
+  void setSubtitleTrack(String? name, int? index) {
+    _videoPlayerPlatform.setSubtitleTrack(_textureId, name, index);
+  }
+
   void setMixWithOthers(bool mixWithOthers) {
     _videoPlayerPlatform.setMixWithOthers(_textureId, mixWithOthers);
   }

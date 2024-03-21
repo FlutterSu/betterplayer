@@ -354,14 +354,9 @@ class BetterPlayerController {
     _asmsSegmentsLoaded.clear();
     _asmsSegmentsLoading = false;
 
-    if (subtitlesSource.type != BetterPlayerSubtitlesSourceType.none) {
-      if (subtitlesSource.asmsIsSegmented == true) {
-        return;
-      }
-      final subtitlesParsed =
-          await BetterPlayerSubtitlesFactory.parseSubtitles(subtitlesSource);
-      subtitlesLines.addAll(subtitlesParsed);
-    }
+    final index = _betterPlayerSubtitlesSourceList.indexWhere((el) => el.name == subtitlesSource.name);
+
+    videoPlayerController!.setSubtitleTrack(subtitlesSource.name, index);
 
     _postEvent(BetterPlayerEvent(BetterPlayerEventType.changedSubtitles));
     if (!_disposed && !sourceInitialize) {
