@@ -337,6 +337,9 @@ class BetterPlayerController {
       if (betterPlayerDataSource?.useAsmsAudioTracks == true &&
           _isDataSourceAsms(betterPlayerDataSource!)) {
         _betterPlayerAsmsAudioTracks = _response.audios ?? [];
+
+        _postEvent(BetterPlayerEvent(BetterPlayerEventType.changedTrack));
+
         if (_betterPlayerAsmsAudioTracks?.isNotEmpty == true) {
           setAudioTrack(_betterPlayerAsmsAudioTracks!.first);
         }
