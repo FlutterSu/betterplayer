@@ -423,6 +423,13 @@ class MethodChannelVideoPlayer extends VideoPlayerPlatform {
             key: key,
           );
 
+        case 'subtitles':
+          final List<dynamic> data = map['data'] as List;
+
+          return VideoSubtitlesEvent(
+            data: data.cast<String>(),
+          );
+
         default:
           return VideoEvent(
             eventType: VideoEventType.unknown,

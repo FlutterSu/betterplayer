@@ -431,6 +431,24 @@ class VideoEvent {
       buffered.hashCode;
 }
 
+class VideoSubtitlesEvent extends VideoEvent {
+  final List<String> data;
+
+  VideoSubtitlesEvent({required this.data}) : super(eventType: VideoEventType.subtitles, key: null);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is VideoSubtitlesEvent &&
+            runtimeType == other.runtimeType &&
+            eventType == other.eventType &&
+            listEquals(data, other.data);
+  }
+
+  @override
+  int get hashCode => eventType.hashCode ^ data.hashCode;
+}
+
 /// Type of the event.
 ///
 /// Emitted by the platform implementation when the video is initialized or
@@ -465,6 +483,9 @@ enum VideoEventType {
 
   /// Picture in picture mode has been dismissed
   pipStop,
+
+  /// Updated information on the subtitles.
+  subtitles,
 
   /// An unknown event has been received.
   unknown,

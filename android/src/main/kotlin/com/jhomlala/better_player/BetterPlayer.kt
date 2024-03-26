@@ -54,6 +54,7 @@ import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
+import com.google.android.exoplayer2.text.CueGroup
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionOverride
 import com.google.android.exoplayer2.trackselection.TrackSelectionParameters
@@ -516,12 +517,22 @@ internal class BetterPlayer(
                 eventSink.error("VideoError", "Video player had error $error", "")
             }
 
+            override fun onCues(cueGroup: CueGroup) {
+                val event: MutableMap<String, Any?> = HashMap()
+                val data: List<String?> = cueGroup.cues.map { it.text?.toString() }
+
+                event["event"] = "subtitles"
+                event["data"] = data
+                eventSink.success(event)
+            }
+
             override fun onTracksChanged(tracks: Tracks) {
                 Log.i(
                     TAG,
                     "exoPlayer.isTunnelingEnabled: $isTunnelingEnabled"
                 )
             }
+
         })
         val reply: MutableMap<String, Any> = HashMap()
         reply["textureId"] = textureEntry.id
@@ -788,9 +799,73 @@ internal class BetterPlayer(
 
     fun setSubtitleTrack(name: String, index: Int) {
         try {
-           // TODO: Implemented this
+            val mappedTrackInfo = trackSelector.currentMappedTrackInfo
+            if (mappedTrackInfo != null) {
+                //Disable any previous text track
+                for (rendererIndex in 0 until mappedTrackInfo.rendererCount) {
+                    if (mappedTrackInfo.getRendererType(rendererIndex) == C.TRACK_TYPE_TEXT) {
+                        val builder = trackSelector.parameters.buildUpon()
+                            .setRendererDisabled(rendererIndex, true)
+                            .clearOverrides()
+                        trackSelector.setParameters(builder)
+                    }
+                }
+
+                for (rendererIndex in 0 until mappedTrackInfo.rendererCount) {
+                    if (mappedTrackInfo.getRendererType(rendererIndex) != C.TRACK_TYPE_TEXT) {
+                        continue
+                    }
+                    val trackGroupArray = mappedTrackInfo.getTrackGroups(rendererIndex)
+                    var hasElementWithoutLabel = false
+                    for (groupIndex in 0 until trackGroupArray.length) {
+                        val group = trackGroupArray[groupIndex]
+                        for (groupElementIndex in 0 until group.length) {
+                            val format = group.getFormat(groupElementIndex)
+                            if (format.label == null) {
+                                hasElementWithoutLabel = true
+                            }
+                        }
+                    }
+                    for (groupIndex in 0 until trackGroupArray.length) {
+                        val group = trackGroupArray[groupIndex]
+                        for (groupElementIndex in 0 until group.length) {
+                            val label = group.getFormat(groupElementIndex).label
+                            if (name == label && index == groupIndex) {
+                                setSubtitleTrack(rendererIndex, groupIndex, groupElementIndex)
+                                return
+                            }
+
+                            ///Fallback option
+                            if (hasElementWithoutLabel && index == groupIndex) {
+                                setSubtitleTrack(rendererIndex, groupIndex, groupElementIndex)
+                                return
+                            }
+                        }
+                    }
+                }
+            }
+
         } catch (exception: Exception) {
             Log.e(TAG, "setSubtitleTrack failed$exception")
+        }
+    }
+
+    private fun setSubtitleTrack(rendererIndex: Int, groupIndex: Int, groupElementIndex: Int) {
+        val mappedTrackInfo = trackSelector.currentMappedTrackInfo
+        if (mappedTrackInfo != null) {
+            val builder = trackSelector.parameters.buildUpon()
+                .setRendererDisabled(rendererIndex, false)
+                .clearOverrides()
+                .addOverride(
+                    TrackSelectionOverride(
+                        mappedTrackInfo.getTrackGroups(
+                            rendererIndex
+                        ).get(groupIndex), groupElementIndex
+
+                    )
+                )
+
+            trackSelector.setParameters(builder)
         }
     }
 
