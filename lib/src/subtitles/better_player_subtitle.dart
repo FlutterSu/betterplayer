@@ -30,6 +30,10 @@ class BetterPlayerSubtitle {
     }
   }
 
+  factory BetterPlayerSubtitle.fromMethodChannel({required List<String> texts}) {
+    return BetterPlayerSubtitle._(texts: texts);
+  }
+
   static BetterPlayerSubtitle _handle2LinesSubtitles(List<String> scanner) {
     try {
       final timeSplit = scanner[0].split(timerSeparator);

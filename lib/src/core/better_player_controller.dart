@@ -1178,6 +1178,12 @@ class BetterPlayerController {
       case VideoEventType.bufferingEnd:
         _postEvent(BetterPlayerEvent(BetterPlayerEventType.bufferingEnd));
         break;
+      case VideoEventType.subtitles:
+        event as VideoSubtitlesEvent;
+        subtitlesLines.clear();
+        subtitlesLines.add(BetterPlayerSubtitle.fromMethodChannel(texts: event.data));
+        _postEvent(BetterPlayerEvent(BetterPlayerEventType.changedSubtitles));
+        break;
       default:
 
         ///TODO: Handle when needed
