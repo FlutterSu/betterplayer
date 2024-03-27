@@ -717,7 +717,7 @@ internal class BetterPlayer(
         if (mappedTrackInfo != null) {
             val builder = trackSelector.parameters.buildUpon()
                 .setRendererDisabled(rendererIndex, false)
-                .clearOverrides()
+                .clearOverridesOfType(C.TRACK_TYPE_AUDIO)
                 .addOverride(
                     TrackSelectionOverride(
                         mappedTrackInfo.getTrackGroups(
@@ -740,7 +740,7 @@ internal class BetterPlayer(
                     if (mappedTrackInfo.getRendererType(rendererIndex) == C.TRACK_TYPE_TEXT) {
                         val builder = trackSelector.parameters.buildUpon()
                             .setRendererDisabled(rendererIndex, true)
-                            .clearOverrides()
+                            .clearOverridesOfType(C.TRACK_TYPE_TEXT)
                         trackSelector.setParameters(builder)
                     }
                 }
@@ -789,7 +789,7 @@ internal class BetterPlayer(
         if (mappedTrackInfo != null) {
             val builder = trackSelector.parameters.buildUpon()
                 .setRendererDisabled(rendererIndex, false)
-                .clearOverrides()
+                .clearOverridesOfType(C.TRACK_TYPE_TEXT)
                 .addOverride(
                     TrackSelectionOverride(
                         mappedTrackInfo.getTrackGroups(
