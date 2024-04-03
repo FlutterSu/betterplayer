@@ -46,6 +46,7 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.util.Util
+import com.google.android.exoplayer2.video.VideoSize
 import com.jhomlala.better_player.DataSourceUtils.getDataSourceFactory
 import com.jhomlala.better_player.DataSourceUtils.getUserAgent
 import com.jhomlala.better_player.DataSourceUtils.isHTTP
@@ -56,6 +57,8 @@ import java.io.File
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
+
+const val ENABLE_TUNNELING = false // Set true to test Tunneling
 
 internal class BetterPlayer(
     context: Context,
@@ -444,7 +447,9 @@ internal class BetterPlayer(
             })
         exoPlayer?.setVideoSurfaceView(textureEntry)
 
-        setTunnelingEnabled()
+        if (ENABLE_TUNNELING) {
+            setTunnelingEnabled()
+        }
 
         setAudioAttributes(exoPlayer, true)
         exoPlayer?.addListener(object : Player.Listener {
@@ -498,12 +503,13 @@ internal class BetterPlayer(
             }
 
             override fun onTracksChanged(tracks: Tracks) {
-                Log.i(
-                    TAG,
-                    "exoPlayer.isTunnelingEnabled: $isTunnelingEnabled"
-                )
+                if (ENABLE_TUNNELING) {
+                    Log.i(
+                        TAG,
+                        "exoPlayer.isTunnelingEnabled: $isTunnelingEnabled"
+                    )
+                }
             }
-
         })
         val reply: MutableMap<String, Any> = HashMap()
         reply["textureId"] = textureEntry.id
