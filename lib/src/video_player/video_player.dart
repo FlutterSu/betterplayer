@@ -253,6 +253,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
           value = value.copyWith(isPip: false);
           break;
         case VideoEventType.unknown:
+        case VideoEventType.subtitles:
           break;
       }
     }
