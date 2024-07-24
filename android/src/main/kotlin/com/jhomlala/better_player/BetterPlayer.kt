@@ -62,6 +62,7 @@ const val ENABLE_TUNNELING = false // Set true to test Tunneling
 
 internal class BetterPlayer(
     context: Context,
+    private  val textureId: Long,
     private val eventChannel: EventChannel,
     private val surfaceView: SurfaceView,
     customDefaultLoadControl: CustomDefaultLoadControl?,
@@ -512,7 +513,7 @@ internal class BetterPlayer(
             }
         })
         val reply: MutableMap<String, Any> = HashMap()
-        reply["textureId"] = textureEntry.id
+        reply["textureId"] = textureId
         result.success(reply)
     }
 
