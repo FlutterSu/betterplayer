@@ -548,12 +548,12 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     }
 
     Duration? positionToSeek = position;
-    if (position! > value.duration!) {
-      positionToSeek = value.duration;
-    } else if (position < const Duration()) {
-      positionToSeek = const Duration();
-    }
-    _seekPosition = positionToSeek;
+    // if (position! > value.duration!) {
+    //   positionToSeek = value.duration;
+    // } else if (position < const Duration()) {
+    //   positionToSeek = const Duration();
+    // }
+    // _seekPosition = positionToSeek;
 
     await _videoPlayerPlatform.seekTo(_textureId, positionToSeek);
     _updatePosition(position);
