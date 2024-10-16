@@ -33,6 +33,9 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 31
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.jhomlala.better_player'
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -40,7 +43,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 
     sourceSets {
