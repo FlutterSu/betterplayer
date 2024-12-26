@@ -126,17 +126,18 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             STOP_PRE_CACHE_METHOD -> stopPreCache(call, result)
             CLEAR_CACHE_METHOD -> clearCache(result)
             else -> {
-                val textureId = (call.argument<Any>(TEXTURE_ID_PARAMETER) as Number?)!!.toLong()
-                val player = videoPlayers[textureId]
+                val textureId: Long? = call.argument<Number>(TEXTURE_ID_PARAMETER)?.toLong()
+                val player = if (textureId != null) videoPlayers[textureId] else null
+
                 if (player == null) {
                     result.error(
-                        "Unknown textureId",
+                        "Unknown textureId for ${call.method}",
                         "No video player associated with texture id $textureId",
                         null
                     )
                     return
                 }
-                onMethodCall(call, result, textureId, player)
+                onMethodCall(call, result, textureId as Long, player)
             }
         }
     }
